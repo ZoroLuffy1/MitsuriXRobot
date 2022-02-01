@@ -370,10 +370,10 @@ def info(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/KennedyProject/44"
+                                "Health", url="https://t.me/NezukoXupdates/2"
                             ),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/KennedyProject/43"
+                                "Disaster", url="https://t.me/NezukoXupdates/1"
                             ),
                         ],
                     ]
@@ -390,10 +390,10 @@ def info(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/KennedyProject/44"
+                                "Health", url="https://t.me/NezukoXupdates/2"
                             ),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/KennedyProject/43"
+                                "Disaster", url="https://t.me/NezukoXupdates/1"
                             ),
                         ],
                     ]
