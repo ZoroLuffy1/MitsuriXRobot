@@ -215,7 +215,8 @@ def start(update: Update, context: CallbackContext):
         else:
             first_name = update.effective_user.first_name
             update.effective_message.reply_text(
-                text=gs(chat.id, "pm_start_text").format(
+                PM_START_TEXT.format(
+                    escape_markdown(context.bot.first_name),
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
@@ -225,14 +226,14 @@ def start(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text=gs(chat.id, "about_button"),
-                                callback_data="Nezuko_",
+                                text=gs(chat.id, "add_bot_to_group_button"),
+                                url="t.me/Nezukoxbot?startgroup=new",
                             ),
                         ],
                         [
                             InlineKeyboardButton(
-                                text=gs(chat.id, "help_button"),
-                                callback_data="help_back",
+                                text=gs(chat.id, "about_button"),
+                                callback_data="Nezuko_",
                             ),
                             InlineKeyboardButton(
                                 text=gs(chat.id, "inline_button"),
@@ -241,8 +242,8 @@ def start(update: Update, context: CallbackContext):
                         ],
                         [
                             InlineKeyboardButton(
-                                text=gs(chat.id, "add_bot_to_group_button"),
-                                url="t.me/Nezukoxbot?startgroup=new",
+                                text=gs(chat.id, "help_button"),
+                                callback_data="help_back",
                             ),
                         ],
                     ]
@@ -444,12 +445,14 @@ def Nezuko_about_callback(update, context):
         first_name = update.effective_user.first_name
         uptime = get_readable_time((time.time() - StartTime))
         query.message.edit_text(
-            text=gs(chat.id, "pm_start_text").format(
+            PM_START_TEXT.format(
+                escape_markdown(context.bot.first_name),
                 escape_markdown(first_name),
                 escape_markdown(uptime),
                 sql.num_users(),
                 sql.num_chats(),
             ),
+            
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
@@ -588,7 +591,8 @@ def Source_about_callback(update, context):
     elif query.data == "source_back":
         first_name = update.effective_user.first_name
         query.message.edit_text(
-            text=gs(chat.id, "pm_start_text").format(
+            PM_START_TEXT.format(
+                escape_markdown(context.bot.first_name),
                 escape_markdown(first_name),
                 escape_markdown(uptime),
                 sql.num_users(),
