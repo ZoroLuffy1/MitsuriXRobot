@@ -9,7 +9,7 @@ from NezukoRobot import (
     TIGERS,
     WOLVES,
     dispatcher,
-) 
+)
 from NezukoRobot.modules.helper_funcs.chat_status import dev_plus
 from NezukoRobot.modules.helper_funcs.extraction import (
     extract_user,
