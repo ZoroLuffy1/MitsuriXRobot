@@ -85,6 +85,20 @@ def get_readable_time(seconds: int) -> str:
 
 Nezuko_IMG = "https://telegra.ph/file/6d3e3ef24f64fb6e35df0.jpg"
 
+PM_START_TEXT = """
+🌸══════「 [{}](https://telegra.ph/file/ccc9b76512bfdda7036f0.jpg) 」══════🌸
+*ʜᴇʏ! {},*
+*ɪ ᴀᴍ 𝐍𝐞𝐳𝐮𝐤𝐨 ᴀɴ ᴀɴɪᴍᴇ ᴛʜᴇᴍᴇᴅ ᴀᴅᴠᴀɴᴄᴇ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ꜱᴇᴠᴇʀᴀʟ ꜱᴘᴇᴄɪᴀʟɪᴛɪᴇꜱ.*
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+╔═══════•❃•❀•❃════════╗
+✓• *Uᴘᴛɪᴍᴇ:* {}
+╠════════════════════╣
+✓• {} *Uꜱᴇʀ, Aᴄʀᴏꜱꜱ* {} *Cʜᴀᴛꜱ.*
+╚═══════•❃•❀•❃════════╝
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+➛ᴛʀʏ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ ᴛᴏ ᴋɴᴏᴡ ᴍʏ ᴅᴇᴍᴏɴ ᴀʙɪʟɪᴛɪᴇs ××
+"""
+
 DONATE_STRING = """Heya, glad to hear you want to donate!
  You can support the project by contacting @saint_foire \
  Supporting isnt always financial! \
