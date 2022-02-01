@@ -46,31 +46,31 @@ from NezukoRobot.utils.pastebin import paste
 MESSAGE_DUMP_CHAT = EVENT_LOGS
 
 keywords_list = [
-    "ᴀʟɪᴠᴇ",
-    "ɪᴍᴀɢᴇ",
-    "ᴡᴀʟʟ",
-    "ᴛᴍᴅʙ",
-    "ʟʏʀɪᴄs",
-    "ᴇxᴇᴄ",
-    "sᴘᴇᴇᴅᴛᴇsᴛ",
-    "sᴇᴀʀᴄʜ",
-    "ᴘɪɴɢ",
-    "ᴡᴇʙss",
-    "ғᴀᴋᴇɢᴇɴ",
-    "ɢsᴇᴀʀᴄʜ",
-    "ᴘᴀsᴛᴇ",
-    "ᴛʀ",
-    "ᴜᴅ",
-    "ʏᴏᴜᴛᴜʙᴇ",
-    "ɪɴғᴏ",
-    "ɢᴏᴏɢʟᴇ",
-    "ɢʜ",
-    "ᴛᴏʀʀᴇɴᴛ",
-    "ᴘᴏᴋᴇᴅᴇx",
-    "sᴀᴀᴠɴ",
-    "ᴡɪᴋɪ",
-    "ᴍᴜsɪᴄ",
-    "ʏᴛᴍᴜsɪᴄ",
+    "ALIVE",
+    "IMAGE",
+    "WALL",
+    "TMDB",
+    "LYRICS",
+    "EXEC",
+    "SPEEDTEST",
+    "SEARCH",
+    "PING",
+    "WEBSS",
+    "FAKEGEN",
+    "GSEARCH",
+    "PASTE",
+    "TR",
+    "UD",
+    "YOUTUBE",
+    "INFO",
+    "GOOGLE",
+    "GH",
+    "TORRENT",
+    "POKEDEX",
+    "SAAVN",
+    "WIKI",
+    "MUSIC",
+    "YTMUSIC",
 ]
 
 
@@ -107,7 +107,7 @@ async def inline_help_func(__HELP__):
             input_message_content=InputTextMessageContent(
                 "**__Click A Button To Get Started.__**"
             ),
-            thumb_url="https://telegra.ph/file/5755d25e718851cdecacb.jpg",
+            thumb_url="https://telegra.ph/file/53acf6bef9f65edc21113.jpg",
             reply_markup=buttons,
         ),
     ]
@@ -120,25 +120,25 @@ async def alive_function(answers):
     bot_state = "Dead" if not await app.get_me() else "Alive"
     ubot_state = "Dead" if not await ubot2.get_me() else "Alive"
     buttons.add(
-        InlineKeyboardButton("Main bot", url="https://t.me/Nezukoxbot"),
+        InlineKeyboardButton("Main bot", url="https://t.me/NezukoXRobot"),
         InlineKeyboardButton("Go Inline!", switch_inline_query_current_chat=""),
     )
 
     msg = f"""
-**[Nezuko Robot ❤️](https://t.me/machinaxsupport):**
+**[Nezuko ❤️](https://t.me/NezukoXSupport):**
 **MainBot:** `{bot_state}`
 **UserBot:** `{ubot_state}`
 **Python:** `{pyver.split()[0]}`
 **Pyrogram:** `{pyrover}`
 **MongoDB:** `{mongover}`
 **Platform:** `{sys.platform}`
-**Profiles:** [BOT](t.me/{BOT_USERNAME}) | [OWNER BOT](t.me/saint_foire)
+**Profiles:** [BOT](t.me/{BOT_USERNAME}) | [OWNER BOT](t.me/Hiro_kun_14)
 """
     answers.append(
         InlineQueryResultArticle(
             title="Alive",
             description="Check Bot's Stats",
-            thumb_url="https://telegra.ph/file/5755d25e718851cdecacb.jpg",
+            thumb_url="https://telegra.ph/file/53acf6bef9f65edc21113.jpg",
             input_message_content=InputTextMessageContent(
                 msg, disable_web_page_preview=True
             ),
