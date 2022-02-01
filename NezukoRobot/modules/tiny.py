@@ -1,8 +1,10 @@
 import os
+
 import cv2
 from PIL import Image
-from NezukoRobot.events import register
+
 from NezukoRobot import telethn as tbot
+from NezukoRobot.events import register
 
 
 @register(pattern="^/tiny ?(.*)")
@@ -13,14 +15,14 @@ async def _(event):
         return
     kontol = await event.reply("`Processing tiny...`")
     ik = await tbot.download_media(reply)
-    im1 = Image.open("NezukoRobot/resources/Nezuko_stickers.png")
+    im1 = Image.open("ShasaBot/resources/ken.png")
     if ik.endswith(".tgs"):
         await tbot.download_media(reply, "ken.tgs")
         os.system("lottie_convert.py ken.tgs json.json")
         json = open("json.json", "r")
         jsn = json.read()
         jsn = jsn.replace("512", "2000")
-        open = ("json.json", "w").write(jsn)
+        ("json.json", "w").write(jsn)
         os.system("lottie_convert.py json.json ken.tgs")
         file = "ken.tgs"
         os.remove("json.json")
