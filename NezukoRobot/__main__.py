@@ -452,7 +452,6 @@ def Nezuko_about_callback(update, context):
                 sql.num_users(),
                 sql.num_chats(),
             ),
-            
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
