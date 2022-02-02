@@ -546,7 +546,6 @@ def siesta_about_callback(update, context):
                         InlineKeyboardButton(
                             text="Hɪʀᴏ Kᴜɴ", url="https://github.com/Harshit-Kun"
                         ),
-                    
                     ],
                     [
                         InlineKeyboardButton(
