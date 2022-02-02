@@ -226,16 +226,26 @@ def start(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text=gs(chat.id, "add_bot_to_group_button"), url="t.me/NezukoXRobot?startgroup=new"),
-                        ],
-                        [
-                            InlineKeyboardButton(text=gs(chat.id, "about_button"), callback_data="siesta_"),
-                            InlineKeyboardButton(text=gs(chat.id, "inline_button"), switch_inline_query_current_chat=""),
+                                text=gs(chat.id, "add_bot_to_group_button"),
+                                url="t.me/NezukoXRobot?startgroup=new",
+                            ),
                         ],
                         [
                             InlineKeyboardButton(
-                            text=gs(chat.id, "help_button"), callback_data="help_back"
-                        ]
+                                text=gs(chat.id, "about_button"),
+                                callback_data="Siesta_",
+                            ),
+                            InlineKeyboardButton(
+                                text=gs(chat.id, "inline_button"),
+                                switch_inline_query_current_chat="",
+                            ),
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                text=gs(chat.id, "help_button"),
+                                callback_data="help_back",
+                            ),
+                        ],
                     ]
                 ),
                 parse_mode=ParseMode.MARKDOWN,
@@ -431,12 +441,12 @@ def siesta_about_callback(update, context):
                 ]
             ),
         )
-    elif query.data == "siesta_back":
+    elif query.data == "Siesta_back":
         first_name = update.effective_user.first_name
         uptime = get_readable_time((time.time() - StartTime))
         query.message.edit_text(
             PM_START_TEXT.format(
-                    escape_markdown(context.bot.first_name),
+                escape_markdown(context.bot.first_name),
                 escape_markdown(first_name),
                 escape_markdown(uptime),
                 sql.num_users(),
@@ -444,16 +454,14 @@ def siesta_about_callback(update, context):
             ),
             reply_markup=InlineKeyboardMarkup(
                 [
-                   [
-                    InlineKeyboardButton(
-                                text=gs(chat.id, "add_bot_to_group_button"),
-                                url="t.me/NezukoXRobot?startgroup=new",
-                            ),
+                    [
+                        InlineKeyboardButton(
+                            text=gs(chat.id, "about_button"), callback_data="Siesta_"
+                        ),
                     ],
                     [
                         InlineKeyboardButton(
-                                text=gs(chat.id, "about_button"),
-                                callback_data="Siesta_",
+                            text=gs(chat.id, "help_button"), callback_data="help_back"
                         ),
                         InlineKeyboardButton(
                             text=gs(chat.id, "inline_button"),
@@ -462,9 +470,10 @@ def siesta_about_callback(update, context):
                     ],
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "help_button"), callback_data="help_back"
+                            text=gs(chat.id, "add_bot_to_group_button"),
+                            url="t.me/Nezukoxrobot?startgroup=new",
                         ),
-                    ],               
+                    ],
                 ]
             ),
             parse_mode=ParseMode.MARKDOWN,
@@ -582,7 +591,7 @@ def Source_about_callback(update, context):
         first_name = update.effective_user.first_name
         query.message.edit_text(
             PM_START_TEXT.format(
-                    escape_markdown(context.bot.first_name),(
+                escape_markdown(context.bot.first_name),
                 escape_markdown(first_name),
                 escape_markdown(uptime),
                 sql.num_users(),
@@ -590,15 +599,14 @@ def Source_about_callback(update, context):
             ),
             reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton(
-                                text=gs(chat.id, "add_bot_to_group_button"),
-                                url="t.me/NezukoXRobot?startgroup=new",
-                            ),
+                    [
+                        InlineKeyboardButton(
+                            text=gs(chat.id, "about_button"), callback_data="Siesta_"
+                        ),
                     ],
                     [
                         InlineKeyboardButton(
-                                text=gs(chat.id, "about_button"),
-                                callback_data="Siesta_",
+                            text=gs(chat.id, "help_button"), callback_data="help_back"
                         ),
                         InlineKeyboardButton(
                             text=gs(chat.id, "inline_button"),
@@ -607,7 +615,8 @@ def Source_about_callback(update, context):
                     ],
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "help_button"), callback_data="help_back"
+                            text=gs(chat.id, "add_bot_to_group_button"),
+                            url="t.me/Nezukoxrobot?startgroup=new",
                         ),
                     ],
                 ]
@@ -616,7 +625,6 @@ def Source_about_callback(update, context):
             timeout=60,
             disable_web_page_preview=False,
         )
-
 
 def get_help(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
