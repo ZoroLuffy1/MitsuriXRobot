@@ -9,7 +9,7 @@ from SiestaRobot import (
     TIGERS,
     WOLVES,
     dispatcher,
-) 
+)
 from SiestaRobot.modules.helper_funcs.chat_status import dev_plus
 from SiestaRobot.modules.helper_funcs.extraction import (
     extract_user,

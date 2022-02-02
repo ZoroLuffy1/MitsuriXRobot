@@ -1,4 +1,4 @@
-from SiestaRobot  import dispatcher
+from SiestaRobot import dispatcher
 from SiestaRobot.modules.disable import DisableAbleCommandHandler
 from SiestaRobot.modules.helper_funcs.alternate import typing_action
 from telegram import ParseMode
@@ -472,6 +472,7 @@ def lined(update, context):
         message.reply_to_message.reply_text(string)
     else:
         message.reply_text(string)
+
 
 __mod_name__ = "Styletext"
 
