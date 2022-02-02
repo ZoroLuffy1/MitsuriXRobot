@@ -83,7 +83,21 @@ def get_readable_time(seconds: int) -> str:
     return ping_time
 
 
-SIESTA_IMG = "https://telegra.ph/file/6d3e3ef24f64fb6e35df0.jpg"
+SIESTA_IMG = "https://telegra.ph/file/ccc9b76512bfdda7036f0.jpg"
+
+PM_START_TEXT = """
+🌸══════「 [{}](https://telegra.ph/file/ccc9b76512bfdda7036f0.jpg) 」══════🌸
+*ʜᴇʏ! {},*
+*ɪ ᴀᴍ 𝐍𝐞𝐳𝐮𝐤𝐨 ᴀɴ ᴀɴɪᴍᴇ ᴛʜᴇᴍᴇᴅ ᴀᴅᴠᴀɴᴄᴇ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ꜱᴇᴠᴇʀᴀʟ ꜱᴘᴇᴄɪᴀʟɪᴛɪᴇꜱ.*
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+╔═══════•❃•❀•❃════════╗
+✓• *Uᴘᴛɪᴍᴇ:* {}
+╠════════════════════╣
+✓• {} *Uꜱᴇʀ, Aᴄʀᴏꜱꜱ* {} *Cʜᴀᴛꜱ.*
+╚═══════•❃•❀•❃════════╝
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+➛ᴛʀʏ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ ᴛᴏ ᴋɴᴏᴡ ᴍʏ ᴅᴇᴍᴏɴ ᴀʙɪʟɪᴛɪᴇs ××
+"""
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
  You can support the project by contacting @saint_foire \
@@ -201,7 +215,8 @@ def start(update: Update, context: CallbackContext):
         else:
             first_name = update.effective_user.first_name
             update.effective_message.reply_text(
-                text=gs(chat.id, "pm_start_text").format(
+                PM_START_TEXT.format(
+                    escape_markdown(context.bot.first_name),
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
@@ -209,29 +224,29 @@ def start(update: Update, context: CallbackContext):
                 ),
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [
-                            InlineKeyboardButton(
-                                text=gs(chat.id, "about_button"),
-                                callback_data="siesta_",
-                            ),
-                        ],
-                        [
-                            InlineKeyboardButton(
-                                text=gs(chat.id, "help_button"),
-                                callback_data="help_back",
-                            ),
-                            InlineKeyboardButton(
-                                text=gs(chat.id, "inline_button"),
-                                switch_inline_query_current_chat="",
-                            ),
-                        ],
-                        [
-                            InlineKeyboardButton(
+                       [
+                    InlineKeyboardButton(
                                 text=gs(chat.id, "add_bot_to_group_button"),
-                                url="t.me/Siestaxbot?startgroup=new",
+                                url="t.me/NezukoXRobot?startgroup=new",
                             ),
-                        ],
+                    ],
+                    [
+                        InlineKeyboardButton(
+                                text=gs(chat.id, "about_button"),
+                                callback_data="Siesta_",
+                        ),
+                        InlineKeyboardButton(
+                            text=gs(chat.id, "inline_button"),
+                            switch_inline_query_current_chat="",
+                        ),
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text=gs(chat.id, "help_button"), callback_data="help_back"
+                        ),
+                   
                     ]
+                    
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
@@ -430,7 +445,8 @@ def siesta_about_callback(update, context):
         first_name = update.effective_user.first_name
         uptime = get_readable_time((time.time() - StartTime))
         query.message.edit_text(
-            text=gs(chat.id, "pm_start_text").format(
+            PM_START_TEXT.format(
+                    escape_markdown(context.bot.first_name),
                 escape_markdown(first_name),
                 escape_markdown(uptime),
                 sql.num_users(),
@@ -438,14 +454,16 @@ def siesta_about_callback(update, context):
             ),
             reply_markup=InlineKeyboardMarkup(
                 [
-                    [
-                        InlineKeyboardButton(
-                            text=gs(chat.id, "about_button"), callback_data="siesta_"
-                        ),
+                   [
+                    InlineKeyboardButton(
+                                text=gs(chat.id, "add_bot_to_group_button"),
+                                url="t.me/NezukoXRobot?startgroup=new",
+                            ),
                     ],
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "help_button"), callback_data="help_back"
+                                text=gs(chat.id, "about_button"),
+                                callback_data="Siesta_",
                         ),
                         InlineKeyboardButton(
                             text=gs(chat.id, "inline_button"),
@@ -454,10 +472,9 @@ def siesta_about_callback(update, context):
                     ],
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "add_bot_to_group_button"),
-                            url="t.me/Siestaxbot?startgroup=new",
+                            text=gs(chat.id, "help_button"), callback_data="help_back"
                         ),
-                    ],
+                    ],               
                 ]
             ),
             parse_mode=ParseMode.MARKDOWN,
@@ -574,7 +591,8 @@ def Source_about_callback(update, context):
     elif query.data == "source_back":
         first_name = update.effective_user.first_name
         query.message.edit_text(
-            text=gs(chat.id, "pm_start_text").format(
+            PM_START_TEXT.format(
+                    escape_markdown(context.bot.first_name),(
                 escape_markdown(first_name),
                 escape_markdown(uptime),
                 sql.num_users(),
@@ -582,14 +600,15 @@ def Source_about_callback(update, context):
             ),
             reply_markup=InlineKeyboardMarkup(
                 [
-                    [
-                        InlineKeyboardButton(
-                            text=gs(chat.id, "about_button"), callback_data="siesta_"
-                        ),
+                    InlineKeyboardButton(
+                                text=gs(chat.id, "add_bot_to_group_button"),
+                                url="t.me/NezukoXRobot?startgroup=new",
+                            ),
                     ],
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "help_button"), callback_data="help_back"
+                                text=gs(chat.id, "about_button"),
+                                callback_data="Siesta_",
                         ),
                         InlineKeyboardButton(
                             text=gs(chat.id, "inline_button"),
@@ -598,8 +617,7 @@ def Source_about_callback(update, context):
                     ],
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "add_bot_to_group_button"),
-                            url="t.me/Siestaxbot?startgroup=new",
+                            text=gs(chat.id, "help_button"), callback_data="help_back"
                         ),
                     ],
                 ]
