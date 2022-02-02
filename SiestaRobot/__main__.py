@@ -430,7 +430,7 @@ def siesta_about_callback(update, context):
                     [
                         InlineKeyboardButton(
                             text=gs(chat.id, "source_button"),
-                            url="https://github.com/shiinobu/SiestaRobot",
+                            url="https://github.com/Harshit-Kun",
                         ),
                     ],
                     [
@@ -520,11 +520,11 @@ def siesta_about_callback(update, context):
                     [
                         InlineKeyboardButton(
                             text=gs(chat.id, "support_chat_link_button"),
-                            url="t.me/machinaxupport",
+                            url="t.me/NezukoXSupport",
                         ),
                         InlineKeyboardButton(
                             text=gs(chat.id, "updates_channel_link_button"),
-                            url="https://t.me/machinaxupdate",
+                            url="https://t.me/NezukoXupdates",
                         ),
                     ],
                     [
@@ -544,16 +544,9 @@ def siesta_about_callback(update, context):
                 [
                     [
                         InlineKeyboardButton(
-                            text="Vain", url="https://github.com/shiinobu"
+                            text="Hɪʀᴏ Kᴜɴ", url="https://github.com/Harshit-Kun"
                         ),
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            text="Paul Larsen", url="https://github.com/PaulSonOfLars"
-                        ),
-                        InlineKeyboardButton(
-                            text="TheHamkerCat", url="https://github.com/TheHamkerCat"
-                        ),
+                    
                     ],
                     [
                         InlineKeyboardButton(
@@ -908,7 +901,7 @@ def main():
         try:
             dispatcher.bot.sendMessage(
                 f"@{SUPPORT_CHAT}",
-                f"""**Yes Darling ❤️, i am activated!**""",
+                " I am ready to work [.](https://telegra.ph/file/b2c9110cc821930f95e3c.mp4)",
                 parse_mode=ParseMode.MARKDOWN,
             )
         except Unauthorized:
