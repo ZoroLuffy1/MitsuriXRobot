@@ -362,12 +362,12 @@ def info(update: Update, context: CallbackContext):
 
     if INFOPIC:
         try:
-            username=update.effective_user.username
+            username = update.effective_user.username
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
             context.bot.sendChatAction(chat.id, "upload_photo")
             context.bot.send_photo(
-            chat.id,
-            photo=profile,
+                chat.id,
+                photo=profile,
                 caption=(text),
                 reply_markup=InlineKeyboardMarkup(
                     [
