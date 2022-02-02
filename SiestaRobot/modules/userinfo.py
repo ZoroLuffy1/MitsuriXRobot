@@ -384,7 +384,7 @@ def info(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
             )
 
-            os.remove(f"{user.id}.png")
+      
         # Incase user don't have profile pic, send normal text
         except IndexError:
             message.reply_text(
