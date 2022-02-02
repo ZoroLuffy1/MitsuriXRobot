@@ -24,16 +24,16 @@ async def carbon_func(_, message):
     carbon.close()
 
 
-MEMEK = "https://telegra.ph/file/31c56fb53884915fec558.jpg"
+MEMEK = "https://telegra.ph/file/2b1328f2e131854dd29cf.jpg"
 
 
 @pbot.on_message(filters.command("repo"))
 async def repo(_, message):
     await message.reply_photo(
         photo=MEMEK,
-        caption=f"""✨ **Hey I'm Siesta Robot** ✨ 
+        caption=f"""✨ **Hey I'm Nezuko Robot** ✨ 
 
-**Owner repo : [Vain](https://t.me/saint_foire)**
+**Owner repo : [Hɪʀᴏ Kᴜɴ](https://t.me/Hiro_Kun_14)**
 **Python Version :** `{y()}`
 **Library Version :** `{o}`
 **Telethon Version :** `{s}`
@@ -45,9 +45,9 @@ async def repo(_, message):
             [
                 [
                     InlineKeyboardButton(
-                        "Repo", url="https://github.com/shiinobu/SiestaRobot"
+                        "Repo", url="https://github.com/Harshit-Kun"
                     ),
-                    InlineKeyboardButton("Support", url="https://t.me/machinaxsupport"),
+                    InlineKeyboardButton("Support", url="https://t.me/nezukoxsupport"),
                 ]
             ]
         ),
