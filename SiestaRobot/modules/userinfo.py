@@ -281,6 +281,9 @@ def info(update: Update, context: CallbackContext):
         text += f"\n✪ Username: @{html.escape(user.username)}"
 
     text += f"\n✪ Userlink: {mention_html(user.id, 'link')}"
+    text += "\n✪ Pfp Count: {}".format(
+        context.bot.get_user_profile_photos(user.id).total_count
+    )
 
     if chat.type != "private" and user_id != bot.id:
         _stext = "\n✪ Presence: <code>{}</code>"
@@ -313,22 +316,22 @@ def info(update: Update, context: CallbackContext):
     disaster_level_present = False
 
     if user.id == OWNER_ID:
-        text += "\n\nThe Disaster level of this person is 'King'."
+        text += "\n\nThe Disaster level of this person is 'Lord'."
         disaster_level_present = True
     elif user.id in DEV_USERS:
-        text += "\n\nThis user is member of 'Prince'."
+        text += "\n\nThis user is member of 'Sensei'."
         disaster_level_present = True
     elif user.id in DRAGONS:
-        text += "\n\nThe Disaster level of this person is 'Emperor'."
+        text += "\n\nThe Disaster level of this person is 'Hashira'."
         disaster_level_present = True
     elif user.id in DEMONS:
-        text += "\n\nThe Disaster level of this person is 'Governor'."
+        text += "\n\nThe Disaster level of this person is 'Demon'."
         disaster_level_present = True
     elif user.id in TIGERS:
-        text += "\n\nThe Disaster level of this person is 'Captain'."
+        text += "\n\nThe Disaster level of this person is 'Kinoe'."
         disaster_level_present = True
     elif user.id in WOLVES:
-        text += "\n\nThe Disaster level of this person is 'Soldier'."
+        text += "\n\nThe Disaster level of this person is 'Friend'."
         disaster_level_present = True
     elif user.id == 1829047705:
         text += (
@@ -359,21 +362,21 @@ def info(update: Update, context: CallbackContext):
 
     if INFOPIC:
         try:
+            username=update.effective_user.username
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
-            _file = bot.get_file(profile["file_id"])
-            _file.download(f"{user.id}.png")
-
-            message.reply_document(
-                document=open(f"{user.id}.png", "rb"),
+            context.bot.sendChatAction(chat.id, "upload_photo")
+            context.bot.send_photo(
+            chat.id,
+            photo=profile,
                 caption=(text),
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/KennedyProject/44"
+                                "Health", url="https://t.me/NezukoXupdates/2"
                             ),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/KennedyProject/43"
+                                "Disaster", url="https://t.me/NezukoXupdates/1"
                             ),
                         ],
                     ]
@@ -390,10 +393,10 @@ def info(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/KennedyProject/44"
+                                "Health", url="https://t.me/NezukoXupdates/2"
                             ),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/KennedyProject/43"
+                                "Disaster", url="https://t.me/NezukoXupdates/1"
                             ),
                         ],
                     ]
