@@ -233,7 +233,7 @@ def start(update: Update, context: CallbackContext):
                         [
                             InlineKeyboardButton(
                                 text=gs(chat.id, "about_button"),
-                                callback_data="Siesta_",
+                                callback_data="siesta_",
                             ),
                             InlineKeyboardButton(
                                 text=gs(chat.id, "inline_button"),
@@ -456,7 +456,7 @@ def siesta_about_callback(update, context):
                 [
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "about_button"), callback_data="Siesta_"
+                            text=gs(chat.id, "about_button"), callback_data="siesta_"
                         ),
                     ],
                     [
@@ -601,7 +601,7 @@ def Source_about_callback(update, context):
                 [
                     [
                         InlineKeyboardButton(
-                            text=gs(chat.id, "about_button"), callback_data="Siesta_"
+                            text=gs(chat.id, "about_button"), callback_data="siesta_"
                         ),
                     ],
                     [
