@@ -141,18 +141,19 @@ def reply_afk(update: Update, context: CallbackContext):
 
 
 def check_afk(update, context, user_id, fst_name, userc_id):
+    chat = update.effective_chat
     if is_user_afk(user_id):
         reason = afk_reason(user_id)
         since_afk = get_readable_time((time.time() - float(REDIS.get(f'afk_time_{user_id}'))))
         if reason == "none":
             if int(userc_id) == int(user_id):
                 return
-            res = "<b>{}</b> is currently AFK!\nLast Seen: <code>{}</code>".format(fst_name, since_afk)
+            res = gs(chat.id, "afk_check").format(fst_name, since_afk)
             update.effective_message.reply_text(res, parse_mode="html")
         else:
             if int(userc_id) == int(user_id):
                 return
-            res = "<b>{}</b> is currently Away!\n<b>Reason</b>:{}\nLast Seen : <code>{}</code>".format(fst_name, reason, since_afk)
+            res = gs(chat.id, "afk_check").format(fst_name, reason, since_afk)
             update.effective_message.reply_text(res, parse_mode="html")
             
             
