@@ -45,6 +45,8 @@ def afk(update: Update, context: CallbackContext):
     if user.id in [777000, 1087968824]:
         return
     start_afk_time = time.time()
+    
+    notice = ""
     if len(args) >= 2:
         reason = args[1]
         if len(reason) > 100:
