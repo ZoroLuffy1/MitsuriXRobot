@@ -1,4 +1,6 @@
 import random, html
+import time
+from typing import Optional
 
 from SiestaRobot import dispatcher
 from SiestaRobot.modules.disable import (
@@ -17,6 +19,7 @@ from SiestaRobot.modules.sql.afk_redis import (
 from telegram import MessageEntity, Update
 from SiestaRobot import REDIS
 from telegram.error import BadRequest
+from SiestaRobot.modules.helper_funcs.readable_time import get_readable_time
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.ext import (
     CallbackContext,
