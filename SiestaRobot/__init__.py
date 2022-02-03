@@ -12,6 +12,7 @@ from inspect import getfullargspec
 from aiohttp import ClientSession
 from Python_ARQ import ARQ
 from telethon import TelegramClient
+from redis import StrictRedis
 from telethon.sessions import StringSession
 from telethon.sessions import MemorySession
 from pyrogram.types import Message
@@ -113,6 +114,7 @@ if ENV:
     NO_LOAD = os.environ.get("NO_LOAD", "translation").split()
     DEL_CMDS = bool(os.environ.get("DEL_CMDS", False))
     STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", False))
+    REDIS_URL = os.environ.get("REDIS_URL")
     WORKERS = int(os.environ.get("WORKERS", 8))
     BAN_STICKER = os.environ.get("BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg")
     ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False)
@@ -197,6 +199,7 @@ else:
     BAN_STICKER = Config.BAN_STICKER
     ALLOW_EXCL = Config.ALLOW_EXCL
     CASH_API_KEY = Config.CASH_API_KEY
+    REDIS_URL = Config.REDIS_URL
     TIME_API_KEY = Config.TIME_API_KEY
     WALL_API = Config.WALL_API
     SUPPORT_CHAT = Config.SUPPORT_CHAT
@@ -217,13 +220,18 @@ else:
 # If you forking dont remove this id, just add your id. LOL...
 
 DRAGONS.add(OWNER_ID)
-DRAGONS.add(2088106582)
-DRAGONS.add(945137470)
-DRAGONS.add(5099853374)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(2088106582)
-DEV_USERS.add(945137470)
-DEV_USERS.add(5099853374)
+
+REDIS = StrictRedis.from_url(REDIS_URL,decode_responses=True)
+try:
+    REDIS.ping()
+    LOGGER.info("Your redis server is now alive!")
+except BaseException:
+    raise Exception("Your redis server is not alive, please check again.")
+    
+finally:
+   REDIS.ping()
+   LOGGER.info("Your redis server is now alive!")
 
 if not SPAMWATCH_API:
     sw = None
