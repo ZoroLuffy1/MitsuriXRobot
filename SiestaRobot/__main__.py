@@ -900,7 +900,7 @@ def main():
         try:
             dispatcher.bot.sendMessage(
                 f"@{SUPPORT_CHAT}",
-                " I am ready to work [.](https://telegra.ph/file/b2c9110cc821930f95e3c.mp4)",
+                " I'm ready to work kawai koto[✨](https://telegra.ph/file/b2c9110cc821930f95e3c.mp4)",
                 parse_mode=ParseMode.MARKDOWN,
             )
         except Unauthorized:
