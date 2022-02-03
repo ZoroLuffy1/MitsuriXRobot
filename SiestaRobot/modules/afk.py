@@ -8,7 +8,9 @@ from SiestaRobot.modules.disable import (
 from SiestaRobot.modules.sql import afk_sql as sql
 from SiestaRobot.modules.users import get_user_id
 from SiestaRobot.modules.language import gs
+from SiestaRobot.modules.sql.afk_redis import start_afk, end_afk, is_user_afk, afk_reason
 from telegram import MessageEntity, Update
+from SiestaRobot import REDIS
 from telegram.error import BadRequest
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.ext import (
@@ -34,8 +36,7 @@ def afk(update: Update, context: CallbackContext):
 
     if user.id in [777000, 1087968824]:
         return
-
-    notice = ""
+    start_afk_time = time.time()
     if len(args) >= 2:
         reason = args[1]
         if len(reason) > 100:
@@ -43,8 +44,9 @@ def afk(update: Update, context: CallbackContext):
             notice = gs(chat.id, "reason_len")
     else:
         reason = ""
-
-    sql.set_afk(update.effective_user.id, reason)
+        
+    start_afk(update.effective_user.id, reason)
+    REDIS.set(f'afk_time_{update.effective_user.id}', start_afk_time)
     fname = update.effective_user.first_name
     try:
         update.effective_message.reply_text(
@@ -62,7 +64,12 @@ def no_longer_afk(update: Update, context: CallbackContext):
     if not user:  # ignore channels
         return
 
-    res = sql.rm_afk(user.id)
+    if not is_user_afk(user.id):  #Check if user is afk or not
+        return
+    end_afk_time = get_readable_time((time.time() - float(REDIS.get(f'afk_time_{user.id}'))))
+    REDIS.delete(f'afk_time_{user.id}')
+    res = end_afk(user.id)
+    
     if res:
         if message.new_chat_members:  # dont say msg
             return
@@ -134,11 +141,9 @@ def reply_afk(update: Update, context: CallbackContext):
 
 
 def check_afk(update, context, user_id, fst_name, userc_id):
-    chat = update.effective_chat
-
-    if sql.is_afk(user_id):
-        user = sql.check_afk_status(user_id)
-        if int(userc_id) == int(user_id):
+    if is_user_afk(user_id):
+        reason = afk_reason(user_id)
+        since_afk = get_readable_time((time.time() - float(REDIS.get(f'afk_time_{user_id}'))))
             return
         if not user.reason:
             res = gs(chat.id, "afk_check").format(fst_name)
@@ -148,6 +153,29 @@ def check_afk(update, context, user_id, fst_name, userc_id):
                 html.escape(fst_name), html.escape(user.reason)
             )
             update.effective_message.reply_text(res, parse_mode="html")
+            
+            
+            
+def __user_info__(user_id):
+    is_afk = is_user_afk(user_id)
+    text = ""
+    if is_afk:
+        since_afk = get_readable_time(
+            (time.time() - float(REDIS.get(f"afk_time_{user_id}")))
+        )
+        text = "<i>This user is currently afk (away from keyboard).</i>"
+        text += f"\n<i>Since: {since_afk}</i>"
+
+    else:
+        text = "<i>This user is currently isn't afk (away from keyboard).</i>"
+    return text
+
+
+def __gdpr__(user_id):
+    end_afk(user_id)
+
+
+
 
 
 AFK_HANDLER = DisableAbleCommandHandler("afk", afk, run_async=True)
