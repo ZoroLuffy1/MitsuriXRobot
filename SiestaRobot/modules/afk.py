@@ -141,6 +141,8 @@ def reply_afk(update: Update, context: CallbackContext):
 
 
 def check_afk(update, context, user_id, fst_name, userc_id):
+    chat = update.effective_chat
+    
     if is_user_afk(user_id):
         reason = afk_reason(user_id)
         since_afk = get_readable_time((time.time() - float(REDIS.get(f'afk_time_{user_id}'))))
