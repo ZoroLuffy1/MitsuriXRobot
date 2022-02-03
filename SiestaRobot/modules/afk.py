@@ -98,7 +98,7 @@ def no_longer_afk(update: Update, context: CallbackContext):
                 gs(chat.id, "afk_array8"),
             ]
             chosen_option = random.choice(options)
-            update.effective_message.reply_text(chosen_option.format(firstname))
+            update.effective_message.reply_text(chosen_option.format(firstname,end_afk_time))
         except:
             return
 
@@ -167,7 +167,7 @@ def check_afk(update, context, user_id, fst_name, userc_id):
         else:
             if int(userc_id) == int(user_id):
                 return
-            res = gs(chat.id, "afk_check").format(fst_name, reason, since_afk)
+            res = gs(chat.id, "afk_check_reason").format(fst_name, reason, since_afk)
             update.effective_message.reply_text(res, parse_mode="html")
 
 
