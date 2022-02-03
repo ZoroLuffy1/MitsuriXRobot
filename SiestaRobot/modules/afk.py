@@ -45,7 +45,7 @@ def afk(update: Update, context: CallbackContext):
     if user.id in [777000, 1087968824]:
         return
     start_afk_time = time.time()
-    
+
     notice = ""
     if len(args) >= 2:
         reason = args[1]
@@ -98,7 +98,9 @@ def no_longer_afk(update: Update, context: CallbackContext):
                 gs(chat.id, "afk_array8"),
             ]
             chosen_option = random.choice(options)
-            update.effective_message.reply_text(chosen_option.format(firstname,end_afk_time))
+            update.effective_message.reply_text(
+                chosen_option.format(firstname, end_afk_time)
+            )
         except:
             return
 
