@@ -453,6 +453,55 @@ def upcoming(update: Update, context: CallbackContext):
         upcoming_message += f"{entry_num + 1}. {upcoming_list[entry_num]}\n"
 
     update.effective_message.reply_text(upcoming_message)
+    
+    
+def watchlist(update, context):
+    chat = update.effective_chat  
+    user = update.effective_user 
+    message = update.effective_message  
+    watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
+    watchlist.sort()
+    watchlist = "\n• ".join(watchlist)
+    if watchlist:
+        message.reply_text(
+            "{}<b>'s Watchlist:</b>"
+            "\n• {}".format(mention_html(user.id, user.first_name),
+                        watchlist),
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        message.reply_text(
+            "You havn't added anything in your watchlist!"
+        )
+
+        
+        
+def removewatchlist(update, context):
+    user = update.effective_user 
+    message = update.effective_message 
+    removewlist = message.text.split(' ', 1) 
+    args = context.args
+    query = " ".join(args)
+    if not query:
+        message.reply_text("Please enter a anime name to remove from your watchlist.")
+        return
+    watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
+    removewlist = removewlist[1]
+    
+    if removewlist not in watchlist:
+        message.reply_text(
+            f"<code>{removewlist}</code> doesn't exist in your watch list.",
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        message.reply_text(
+            f"<code>{removewlist}</code> has been removed from your watch list.",
+            parse_mode=ParseMode.HTML
+        )
+        REDIS.srem(f'anime_watch_list{user.id}', removewlist)
+        
+        
+        
 
 
 def button(update: Update, context: CallbackContext):
