@@ -503,6 +503,139 @@ def removewatchlist(update, context):
         
         
         
+        
+def fvrtchar(update, context):
+    chat = update.effective_chat  
+    user = update.effective_user 
+    message = update.effective_message  
+    fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
+    fvrt_char.sort()
+    fvrt_char = "\n• ".join(fvrt_char)
+    if fvrt_char:
+        message.reply_text(
+            "{}<b>'s Harem:</b>"
+            "\n• {}".format(mention_html(user.id, user.first_name),
+                        fvrt_char),
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        message.reply_text(
+            "You havn't added any waifu in your harem!"
+        )
+        
+
+def removefvrtchar(update, context):
+    user = update.effective_user 
+    message = update.effective_message 
+    removewlist = message.text.split(' ', 1) 
+    args = context.args
+    query = " ".join(args)
+    if not query:
+        message.reply_text("Please enter a your waifu name to remove from your harem.")
+        return
+    fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
+    removewlist = removewlist[1]
+    
+    if removewlist not in fvrt_char:
+        message.reply_text(
+            f"<code>{removewlist}</code> doesn't exist in your harem",
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        message.reply_text(
+            f"<code>{removewlist}</code> has been removed from your harem",
+            parse_mode=ParseMode.HTML
+        )
+        REDIS.srem(f'anime_fvrtchar{user.id}', removewlist)
+    
+
+def readmanga(update, context):
+    chat = update.effective_chat  
+    user = update.effective_user 
+    message = update.effective_message  
+    manga_list = list(REDIS.sunion(f'anime_mangaread{user.id}'))
+    manga_list.sort()
+    manga_list = "\n• ".join(manga_list)
+    if manga_list:
+        message.reply_text(
+            "{}<b>'s Manga Lists:</b>"
+            "\n• {}".format(mention_html(user.id, user.first_name),
+                        manga_list),
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        message.reply_text(
+            "You havn't added anything in your manga list!"
+        )
+
+
+def removemangalist(update, context):
+    user = update.effective_user 
+    message = update.effective_message 
+    removewlist = message.text.split(' ', 1) 
+    args = context.args
+    query = " ".join(args)
+    if not query:
+        message.reply_text("Please enter a manga name to remove from your manga list.")
+        return
+    fvrt_char = list(REDIS.sunion(f'anime_mangaread{user.id}'))
+    removewlist = removewlist[1]
+    
+    if removewlist not in fvrt_char:
+        message.reply_text(
+            f"<code>{removewlist}</code> doesn't exist in your manga list.",
+            parse_mode=ParseMode.HTML
+        )
+    else:
+        message.reply_text(
+            f"<code>{removewlist}</code> has been removed from your favorite characters list.",
+            parse_mode=ParseMode.HTML
+        )
+        REDIS.srem(f'anime_mangaread{user.id}', removewlist)
+
+def animestuffs(update, context):
+    query = update.callback_query
+    user = update.effective_user
+    splitter = query.data.split('=')
+    query_match = splitter[0]
+    callback_anime_data = splitter[1] 
+    if query_match == "xanime_watchlist":
+        watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
+        if not callback_anime_data in watchlist:
+            REDIS.sadd(f'anime_watch_list{user.id}', callback_anime_data)
+            context.bot.answer_callback_query(query.id,
+                                                text=f"{callback_anime_data} is successfully added to your watch list.",
+                                                show_alert=True)
+        else:
+            context.bot.answer_callback_query(query.id,
+                                                text=f"{callback_anime_data} is already exists in your watch list!",
+                                                show_alert=True)
+            
+    elif query_match == "xanime_fvrtchar":   
+        fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
+        if not callback_anime_data in fvrt_char:
+            REDIS.sadd(f'anime_fvrtchar{user.id}', callback_anime_data)
+            context.bot.answer_callback_query(query.id,
+                                                text=f"{callback_anime_data} is successfully added to your favorite character.",
+                                                show_alert=True)
+        else:
+            context.bot.answer_callback_query(query.id,
+                                                text=f"{callback_anime_data} is already exists in your favorite characters list!",
+                                                show_alert=True)
+    elif query_match == "xanime_manga":   
+        fvrt_char = list(REDIS.sunion(f'anime_mangaread{user.id}'))
+        if not callback_anime_data in fvrt_char:
+            REDIS.sadd(f'anime_mangaread{user.id}', callback_anime_data)
+            context.bot.answer_callback_query(query.id,
+                                                text=f"{callback_anime_data} is successfully added to your favorite character.",
+                                                show_alert=True)
+        else:
+            context.bot.answer_callback_query(query.id,
+                                                text=f"{callback_anime_data} is already exists in your favorite characters list!",
+                                                show_alert=True)
+        
+        
+        
 
 
 def button(update: Update, context: CallbackContext):
@@ -540,6 +673,48 @@ def button(update: Update, context: CallbackContext):
             progress_message.delete()
         else:
             query.answer("You are not allowed to use this.")
+            
+            
+            
+def anime_quote():
+    url = "https://animechan.vercel.app/api/random"
+    # since text attribute returns dictionary like string
+    response = requests.get(url)
+    try:
+        dic = json.loads(response.text)
+    except Exception:
+        pass
+    quote = dic["quote"]
+    character = dic["character"]
+    anime = dic["anime"]
+    return quote, character, anime
+
+
+def quotes(update: Update, context: CallbackContext):
+    message = update.effective_message
+    quote, character, anime = anime_quote()
+    msg = f"<i>❝{quote}❞</i>\n\n<b>{character} from {anime}</b>"
+    keyboard = InlineKeyboardMarkup(
+        [[InlineKeyboardButton(text="Change🔁", callback_data="change_quote")]]
+    )
+    message.reply_text(
+        msg,
+        reply_markup=keyboard,
+        parse_mode=ParseMode.HTML,
+    )
+
+
+def change_quote(update: Update, context: CallbackContext):
+    query = update.callback_query
+    chat = update.effective_chat
+    message = update.effective_message
+    quote, character, anime = anime_quote()
+    msg = f"<i>❝{quote}❞</i>\n\n<b>{character} from {anime}</b>"
+    keyboard = InlineKeyboardMarkup(
+        [[InlineKeyboardButton(text="Change🔁", callback_data="quote_change")]]
+    )
+    message.edit_text(msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+    
 
 
 def site_search(update: Update, context: CallbackContext, site: str):
@@ -609,6 +784,28 @@ def kaizoku(update: Update, context: CallbackContext):
 def kayo(update: Update, context: CallbackContext):
     site_search(update, context, "kayo")
 
+    
+def animequotes(update: Update, context: CallbackContext):
+    message = update.effective_message
+    name = message.reply_to_message.from_user.first_name if message.reply_to_message else message.from_user.first_name
+    reply_photo = message.reply_to_message.reply_photo if message.reply_to_message else message.reply_photo
+    reply_photo(
+        random.choice(QUOTES_IMG))
+    
+@pgram.on_message(filters.command('watchorder'))
+def watchorderx(_,message):
+	anime =  message.text.replace(message.text.split(' ')[0], '')
+	res = requests.get(f'https://chiaki.site/?/tools/autocomplete_series&term={anime}').json()
+	data = None
+	id_ = res[0]['id']
+	res_ = requests.get(f'https://chiaki.site/?/tools/watch_order/id/{id_}').text
+	soup = BeautifulSoup(res_ , 'html.parser')
+	anime_names = soup.find_all('span' , class_='wo_title')
+	for x in anime_names:
+		data = f"{data}\n{x.text}" if data else x.text
+	message.reply_text(f'Watchorder of {anime}: \n```{data}```')
+    
+    
 
 def helps(chat):
     return gs(chat, "anime_help")
@@ -623,6 +820,19 @@ UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming, run_async=Tru
 KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku, run_async=True)
 KAYO_SEARCH_HANDLER = DisableAbleCommandHandler("kayo", kayo, run_async=True)
 BUTTON_HANDLER = CallbackQueryHandler(button, pattern="anime_.*")
+WATCHLIST_HANDLER = DisableAbleCommandHandler("watchlist", watchlist, run_async=True)
+MANGALIST_HANDLER = DisableAbleCommandHandler("mangalist", readmanga, run_async=True)
+FVRT_CHAR_HANDLER = DisableAbleCommandHandler(["characterlist","fcl","mywaifus"], fvrtchar, run_async=True)
+REMOVE_WATCHLIST_HANDLER = DisableAbleCommandHandler(["removewatchlist","rwl"], removewatchlist, run_async=True)
+REMOVE_FVRT_CHAR_HANDLER = DisableAbleCommandHandler(["rfcharacter","rfcl"], removefvrtchar, run_async=True)
+REMOVE_MANGA_CHAR_HANDLER = DisableAbleCommandHandler(["rmanga","rml"], removemangalist, run_async=True)
+BUTTON_HANDLER = CallbackQueryHandler(button, pattern='anime_.*', run_async=True)
+ANIME_STUFFS_HANDLER = CallbackQueryHandler(animestuffs, pattern='xanime_.*', run_async=True)
+ANIMEQUOTES_HANDLER = DisableAbleCommandHandler("animequotes", animequotes, run_async=True)
+QUOTE = DisableAbleCommandHandler("quote", quotes)
+CHANGE_QUOTE = CallbackQueryHandler(change_quote, pattern=r"change_.*", run_async=True)
+QUOTE_CHANGE = CallbackQueryHandler(change_quote, pattern=r"quote_.*", run_async=True)
+
 
 dispatcher.add_handler(BUTTON_HANDLER)
 dispatcher.add_handler(ANIME_HANDLER)
@@ -633,6 +843,18 @@ dispatcher.add_handler(USER_HANDLER)
 dispatcher.add_handler(KAIZOKU_SEARCH_HANDLER)
 dispatcher.add_handler(KAYO_SEARCH_HANDLER)
 dispatcher.add_handler(UPCOMING_HANDLER)
+dispatcher.add_handler(KAIZOKU_SEARCH_HANDLER)
+dispatcher.add_handler(KAYO_SEARCH_HANDLER)
+dispatcher.add_handler(WATCHLIST_HANDLER)
+dispatcher.add_handler(MANGALIST_HANDLER)
+dispatcher.add_handler(FVRT_CHAR_HANDLER)
+dispatcher.add_handler(REMOVE_FVRT_CHAR_HANDLER)
+dispatcher.add_handler(REMOVE_MANGA_CHAR_HANDLER)
+dispatcher.add_handler(REMOVE_WATCHLIST_HANDLER)
+dispatcher.add_handler(ANIMEQUOTES_HANDLER)
+dispatcher.add_handler(QUOTE)
+dispatcher.add_handler(CHANGE_QUOTE)
+dispatcher.add_handler(QUOTE_CHANGE)
 
 __mod_name__ = "Anime"
 __command_list__ = [
@@ -644,6 +866,8 @@ __command_list__ = [
     "kaizoku",
     "airing",
     "kayo",
+    "kaizoku",
+    "animequotes",
 ]
 __handlers__ = [
     ANIME_HANDLER,
@@ -655,4 +879,5 @@ __handlers__ = [
     KAYO_SEARCH_HANDLER,
     BUTTON_HANDLER,
     AIRING_HANDLER,
+    ANIMEQUOTES_HANDLER,
 ]
