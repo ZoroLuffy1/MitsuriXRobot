@@ -1,7 +1,7 @@
 import datetime
 import html
 import textwrap
-
+import json
 import bs4
 import jikanpy
 import requests
@@ -9,7 +9,10 @@ from SiestaRobot import DEV_USERS, OWNER_ID, DRAGONS, dispatcher
 from SiestaRobot.modules.disable import DisableAbleCommandHandler
 from SiestaRobot.modules.language import gs
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
-from telegram.ext import CallbackContext, CallbackQueryHandler
+from telegram.ext import CallbackQueryHandler, CommandHandler, run_async, CallbackContext
+from telegram.utils.helpers import mention_html
+from pyrogram import filters
+from bs4 import BeautifulSoup
 
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
@@ -254,65 +257,69 @@ def anime(update, context):
                 reply_markup=InlineKeyboardMarkup(buttons))
             
 
-def character(update: Update, context: CallbackContext):
+def character(update, context):
     message = update.effective_message
-    search = message.text.split(" ", 1)
+    search = message.text.split(' ', 1)
     if len(search) == 1:
-        update.effective_message.reply_text("Format : /character < character name >")
+        update.effective_message.reply_animation(CHARACTER_IMG, caption="""Format : /character < character name >""", parse_mode="markdown")
         return
     search = search[1]
-    variables = {"query": search}
+    variables = {'query': search}
     json = requests.post(
-        url, json={"query": character_query, "variables": variables}
-    ).json()
-    if "errors" in json.keys():
-        update.effective_message.reply_text("Character not found")
+        url, json={
+            'query': character_query,
+            'variables': variables
+        }).json()
+    if 'errors' in json.keys():
+        update.effective_message.reply_text('Character not found')
         return
     if json:
-        json = json["data"]["Character"]
-        msg = f"*{json.get('name').get('full')}*(`{json.get('name').get('native')}`)\n"
+        json = json['data']['Character']
+        msg = f"* {json.get('name').get('full')}*(`{json.get('name').get('native')}`) \n"
         description = f"{json['description']}"
-        site_url = json.get("siteUrl")
+        site_url = json.get('siteUrl')
+        char_name = f"{json.get('name').get('full')}"
         msg += shorten(description, site_url)
-        image = json.get("image", None)
+        image = json.get('image', None)
         if image:
-            image = image.get("large")
+            image = image.get('large')
+            buttons = [[InlineKeyboardButton("Save as Waifu ❣️", callback_data=f"xanime_fvrtchar={char_name}")]]
             update.effective_message.reply_photo(
                 photo=image,
-                caption=msg.replace("<b>", "</b>"),
-                parse_mode=ParseMode.MARKDOWN,
-            )
+                caption=msg.replace('<b>', '</b>'),
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode=ParseMode.MARKDOWN)
         else:
             update.effective_message.reply_text(
-                msg.replace("<b>", "</b>"), parse_mode=ParseMode.MARKDOWN
-            )
+                msg.replace('<b>', '</b>'), reply_markup=InlineKeyboardMarkup(buttons), parse_mode=ParseMode.MARKDOWN)
 
 
-def manga(update: Update, context: CallbackContext):
+
+def manga(update, context):
     message = update.effective_message
-    search = message.text.split(" ", 1)
+    search = message.text.split(' ', 1)
     if len(search) == 1:
-        update.effective_message.reply_text("Format : /manga < manga name >")
+        update.effective_message.reply_animation(MANGA_IMG, caption="""Format : /manga < manga name >""", parse_mode="markdown")
         return
     search = search[1]
-    variables = {"search": search}
+    variables = {'search': search}
     json = requests.post(
-        url, json={"query": manga_query, "variables": variables}
-    ).json()
-    msg = ""
-    if "errors" in json.keys():
-        update.effective_message.reply_text("Manga not found")
+        url, json={
+            'query': manga_query,
+            'variables': variables
+        }).json()
+    msg = ''
+    if 'errors' in json.keys():
+        update.effective_message.reply_text('Manga not found')
         return
     if json:
-        json = json["data"]["Media"]
-        title, title_native = json["title"].get("romaji", False), json["title"].get(
-            "native", False
-        )
-        start_date, status, score = (
-            json["startDate"].get("year", False),
-            json.get("status", False),
-            json.get("averageScore", False),
-        )
+        json = json['data']['Media']
+        title, title_native = json['title'].get('romaji',
+                                                False), json['title'].get(
+                                                    'native', False)
+        start_date, status, score = json['startDate'].get(
+            'year', False), json.get('status',
+                                     False), json.get('averageScore', False)
         if title:
             msg += f"*{title}*"
             if title_native:
@@ -323,12 +330,13 @@ def manga(update: Update, context: CallbackContext):
             msg += f"\n*Status* - `{status}`"
         if score:
             msg += f"\n*Score* - `{score}`"
-        msg += "\n*Genres* - "
-        for x in json.get("genres", []):
+        msg += '\n*Genres* - '
+        for x in json.get('genres', []):
             msg += f"{x}, "
         msg = msg[:-2]
-        info = json["siteUrl"]
+        info = json['siteUrl']
         buttons = [[InlineKeyboardButton("More Info", url=info)]]
+        buttons += [[InlineKeyboardButton("📕 Add To Read List", callback_data=f"xanime_manga={title}")]]
         image = json.get("bannerImage", False)
         msg += f"_{json.get('description', None)}_"
         if image:
@@ -337,24 +345,21 @@ def manga(update: Update, context: CallbackContext):
                     photo=image,
                     caption=msg,
                     parse_mode=ParseMode.MARKDOWN,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                )
+                    reply_markup=InlineKeyboardMarkup(buttons))
             except:
                 msg += f" [〽️]({image})"
                 update.effective_message.reply_text(
                     msg,
                     parse_mode=ParseMode.MARKDOWN,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                )
+                    reply_markup=InlineKeyboardMarkup(buttons))
         else:
             update.effective_message.reply_text(
                 msg,
                 parse_mode=ParseMode.MARKDOWN,
-                reply_markup=InlineKeyboardMarkup(buttons),
-            )
+                reply_markup=InlineKeyboardMarkup(buttons))
 
 
-def user(update: Update, context: CallbackContext):
+def user(update, context):
     message = update.effective_message
     args = message.text.strip().split(" ", 1)
 
@@ -378,65 +383,61 @@ def user(update: Update, context: CallbackContext):
     progress_message = update.effective_message.reply_text("Searching.... ")
 
     date_format = "%Y-%m-%d"
-    if user["image_url"] is None:
+    if user['image_url'] is None:
         img = "https://cdn.myanimelist.net/images/questionmark_50.gif"
     else:
-        img = user["image_url"]
+        img = user['image_url']
 
     try:
-        user_birthday = datetime.datetime.fromisoformat(user["birthday"])
+        user_birthday = datetime.datetime.fromisoformat(user['birthday'])
         user_birthday_formatted = user_birthday.strftime(date_format)
     except:
         user_birthday_formatted = "Unknown"
 
-    user_joined_date = datetime.datetime.fromisoformat(user["joined"])
+    user_joined_date = datetime.datetime.fromisoformat(user['joined'])
     user_joined_date_formatted = user_joined_date.strftime(date_format)
 
     for entity in user:
         if user[entity] is None:
             user[entity] = "Unknown"
 
-    about = user["about"].split(" ", 60)
+    about = user['about'].split(" ", 60)
 
     try:
         about.pop(60)
     except IndexError:
         pass
 
-    about_string = " ".join(about)
-    about_string = about_string.replace("<br>", "").strip().replace("\r\n", "\n")
+    about_string = ' '.join(about)
+    about_string = about_string.replace("<br>",
+                                        "").strip().replace("\r\n", "\n")
 
     caption = ""
 
-    caption += textwrap.dedent(
-        f"""
+    caption += textwrap.dedent(f"""
     *Username*: [{user['username']}]({user['url']})
     *Gender*: `{user['gender']}`
     *Birthday*: `{user_birthday_formatted}`
     *Joined*: `{user_joined_date_formatted}`
     *Days wasted watching anime*: `{user['anime_stats']['days_watched']}`
     *Days wasted reading manga*: `{user['manga_stats']['days_read']}`
-    """
-    )
+    """)
 
     caption += f"*About*: {about_string}"
 
-    buttons = [
-        [InlineKeyboardButton(info_btn, url=user["url"])],
-        [
-            InlineKeyboardButton(
-                close_btn, callback_data=f"anime_close, {message.from_user.id}"
-            )
-        ],
-    ]
+    buttons = [[InlineKeyboardButton(info_btn, url=user['url'])],
+               [
+                   InlineKeyboardButton(
+                       close_btn,
+                       callback_data=f"anime_close, {message.from_user.id}")
+               ]]
 
     update.effective_message.reply_photo(
         photo=img,
         caption=caption,
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=False,
-    )
+        disable_web_page_preview=False)
     progress_message.delete()
 
 
