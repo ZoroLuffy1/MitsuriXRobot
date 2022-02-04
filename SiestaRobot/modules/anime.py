@@ -185,78 +185,74 @@ def airing(update, context):
     update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-def anime(update: Update, context: CallbackContext):
+def anime(update, context):
     message = update.effective_message
-    search = message.text.split(" ", 1)
+    search = message.text.split(' ', 1)
     if len(search) == 1:
-        update.effective_message.reply_text("Format : /anime < anime name >")
+        update.effective_message.reply_animation(ANIME_IMG, caption="""Format : /anime < anime name >""", parse_mode="markdown")
         return
     else:
         search = search[1]
-    variables = {"search": search}
+    variables = {'search': search}
     json = requests.post(
-        url, json={"query": anime_query, "variables": variables}
-    ).json()
-    if "errors" in json.keys():
-        update.effective_message.reply_text("Anime not found")
+        url, json={
+            'query': anime_query,
+            'variables': variables
+        }).json()
+    if 'errors' in json.keys():
+        update.effective_message.reply_text('Anime not found ;-;')
         return
     if json:
-        json = json["data"]["Media"]
-        msg = f"*{json['title']['romaji']}*(`{json['title']['native']}`)\n*Type*: {json['format']}\n*Status*: {json['status']}\n*Episodes*: {json.get('episodes', 'N/A')}\n*Duration*: {json.get('duration', 'N/A')} Per Ep.\n*Score*: {json['averageScore']}\n*Genres*: `"
-        for x in json["genres"]:
+        json = json['data']['Media']
+        msg = f"*{json['title']['romaji']}* *-* *({json['title']['native']})*\n\n*• Type*: {json['format']}\n*• Status*: {json['status']}\n*• Episodes*: {json.get('episodes', 'N/A')}\n*• Duration*: {json.get('duration', 'N/A')} Per Ep.\n*• Score*: {json['averageScore']}\n*• Genres*: `"
+        for x in json['genres']:
             msg += f"{x}, "
-        msg = msg[:-2] + "`\n"
-        msg += "*Studios*: `"
-        for x in json["studios"]["nodes"]:
+        msg = msg[:-2] + '`\n'
+        msg += "*• Studios*: `"
+        for x in json['studios']['nodes']:
             msg += f"{x['name']}, "
-        msg = msg[:-2] + "`\n"
-        info = json.get("siteUrl")
-        trailer = json.get("trailer", None)
-        anime_id = json["id"]
+        msg = msg[:-2] + '`\n'
+        anime_name_w = f"{json['title']['romaji']}"
+        info = json.get('siteUrl')
+        trailer = json.get('trailer', None)
+        anime_id = json['id']
         if trailer:
-            trailer_id = trailer.get("id", None)
-            site = trailer.get("site", None)
+            trailer_id = trailer.get('id', None)
+            site = trailer.get('site', None)
             if site == "youtube":
-                trailer = "https://youtu.be/" + trailer_id
-        description = (
-            json.get("description", "N/A")
-            .replace("<i>", "")
-            .replace("</i>", "")
-            .replace("<br>", "")
-        )
+                trailer = 'https://youtu.be/' + trailer_id
+        description = json.get('description', 'N/A').replace('<b>', '').replace(
+            '</b>', '').replace('<br>', '')
         msg += shorten(description, info)
-        image = json.get("bannerImage", None)
+        image = info.replace('anilist.co/anime/', 'img.anili.st/media/')
         if trailer:
-            buttons = [
-                [
-                    InlineKeyboardButton("More Info", url=info),
-                    InlineKeyboardButton("Trailer 🎬", url=trailer),
-                ]
-            ]
+            buttons = [[
+                InlineKeyboardButton("More Info ➕", url=info),
+                InlineKeyboardButton("Trailer 🎬", url=trailer)
+            ]]
+            buttons += [[InlineKeyboardButton("➕ Add To Watchlist ➕", callback_data=f"xanime_watchlist={anime_name_w}")]]
         else:
             buttons = [[InlineKeyboardButton("More Info", url=info)]]
+            buttons += [[InlineKeyboardButton("➕ Add To Watchlist", callback_data=f"xanime_watchlist={anime_name_w}")]]
         if image:
             try:
                 update.effective_message.reply_photo(
                     photo=image,
                     caption=msg,
                     parse_mode=ParseMode.MARKDOWN,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                )
+                    reply_markup=InlineKeyboardMarkup(buttons))
             except:
                 msg += f" [〽️]({image})"
                 update.effective_message.reply_text(
                     msg,
                     parse_mode=ParseMode.MARKDOWN,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                )
+                    reply_markup=InlineKeyboardMarkup(buttons))
         else:
             update.effective_message.reply_text(
                 msg,
                 parse_mode=ParseMode.MARKDOWN,
-                reply_markup=InlineKeyboardMarkup(buttons),
-            )
-
+                reply_markup=InlineKeyboardMarkup(buttons))
+            
 
 def character(update: Update, context: CallbackContext):
     message = update.effective_message
