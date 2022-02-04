@@ -163,23 +163,21 @@ url = "https://graphql.anilist.co"
 
 def airing(update, context):
     message = update.effective_message
-    search_str = message.text.split(' ', 1)
+    search_str = message.text.split(" ", 1)
     if len(search_str) == 1:
         update.effective_message.reply_text(
-            '*Usage:* `/airing <anime name>`',
-            parse_mode = ParseMode.MARKDOWN)
+            "*Usage:* `/airing <anime name>`", parse_mode=ParseMode.MARKDOWN
+        )
         return
-    variables = {'search': search_str[1]}
+    variables = {"search": search_str[1]}
     response = requests.post(
-        url, json={
-            'query': airing_query,
-            'variables': variables
-        }).json()['data']['Media']
-    info = response.get('siteUrl')
-    image = info.replace('anilist.co/anime/', 'img.anili.st/media/')
+        url, json={"query": airing_query, "variables": variables}
+    ).json()["data"]["Media"]
+    info = response.get("siteUrl")
+    image = info.replace("anilist.co/anime/", "img.anili.st/media/")
     msg = f"*Name*: *{response['title']['romaji']}*(`{response['title']['native']}`)\n*• ID*: `{response['id']}`[⁠ ⁠]({image})"
-    if response['nextAiringEpisode']:
-        time = response['nextAiringEpisode']['timeUntilAiring'] * 1000
+    if response["nextAiringEpisode"]:
+        time = response["nextAiringEpisode"]["timeUntilAiring"] * 1000
         time = t(time)
         msg += f"\n*Episode*: `{response['nextAiringEpisode']['episode']}`\n*• Airing In*: `{time}`"
     else:
