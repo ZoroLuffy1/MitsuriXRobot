@@ -193,7 +193,7 @@ def airing(update, context):
         msg += f"\n*Episode*:{response['episodes']}\n*• Status*: `N/A`"
     update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
-
+@typing_action
 def anime(update, context):
     message = update.effective_message
     search = message.text.split(" ", 1)
@@ -288,6 +288,7 @@ def anime(update, context):
             )
 
 
+@typing_action
 def character(update, context):
     message = update.effective_message
     search = message.text.split(" ", 1)
@@ -338,7 +339,7 @@ def character(update, context):
                 parse_mode=ParseMode.MARKDOWN,
             )
 
-
+@typing_action
 def manga(update, context):
     message = update.effective_message
     search = message.text.split(" ", 1)
@@ -415,7 +416,7 @@ def manga(update, context):
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
 
-
+@typing_action
 def user(update, context):
     message = update.effective_message
     args = message.text.strip().split(" ", 1)
@@ -842,19 +843,7 @@ def kayo(update: Update, context: CallbackContext):
     site_search(update, context, "kayo")
 
 
-def animequotes(update: Update, context: CallbackContext):
-    message = update.effective_message
-    name = (
-        message.reply_to_message.from_user.first_name
-        if message.reply_to_message
-        else message.from_user.first_name
-    )
-    reply_photo = (
-        message.reply_to_message.reply_photo
-        if message.reply_to_message
-        else message.reply_photo
-    )
-    reply_photo(random.choice(QUOTES_IMG))
+
 
 @typing_action
 def watchorderx(_, message):
@@ -928,7 +917,7 @@ dispatcher.add_handler(FVRT_CHAR_HANDLER)
 dispatcher.add_handler(REMOVE_FVRT_CHAR_HANDLER)
 dispatcher.add_handler(REMOVE_MANGA_CHAR_HANDLER)
 dispatcher.add_handler(REMOVE_WATCHLIST_HANDLER)
-dispatcher.add_handler(ANIMEQUOTES_HANDLER)
+
 dispatcher.add_handler(QUOTE)
 dispatcher.add_handler(CHANGE_QUOTE)
 dispatcher.add_handler(QUOTE_CHANGE)
@@ -944,7 +933,7 @@ __command_list__ = [
     "airing",
     "kayo",
     "kaizoku",
-    "animequotes",
+    
 ]
 __handlers__ = [
     ANIME_HANDLER,
@@ -956,5 +945,5 @@ __handlers__ = [
     KAYO_SEARCH_HANDLER,
     BUTTON_HANDLER,
     AIRING_HANDLER,
-    ANIMEQUOTES_HANDLER,
+    
 ]
