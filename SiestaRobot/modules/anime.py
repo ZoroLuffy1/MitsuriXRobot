@@ -169,6 +169,7 @@ query ($id: Int,$search: String) {
 
 url = "https://graphql.anilist.co"
 
+
 @typing_action
 def airing(update, context):
     message = update.effective_message
@@ -192,6 +193,7 @@ def airing(update, context):
     else:
         msg += f"\n*Episode*:{response['episodes']}\n*• Status*: `N/A`"
     update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+
 
 @typing_action
 def anime(update, context):
@@ -339,6 +341,7 @@ def character(update, context):
                 parse_mode=ParseMode.MARKDOWN,
             )
 
+
 @typing_action
 def manga(update, context):
     message = update.effective_message
@@ -415,6 +418,7 @@ def manga(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
+
 
 @typing_action
 def user(update, context):
@@ -843,8 +847,6 @@ def kayo(update: Update, context: CallbackContext):
     site_search(update, context, "kayo")
 
 
-
-
 @typing_action
 def watchorderx(_, message):
     anime = message.text.replace(message.text.split(" ")[0], "")
@@ -933,7 +935,6 @@ __command_list__ = [
     "airing",
     "kayo",
     "kaizoku",
-    
 ]
 __handlers__ = [
     ANIME_HANDLER,
@@ -945,5 +946,4 @@ __handlers__ = [
     KAYO_SEARCH_HANDLER,
     BUTTON_HANDLER,
     AIRING_HANDLER,
-    
 ]
