@@ -894,9 +894,7 @@ BUTTON_HANDLER = CallbackQueryHandler(button, pattern="anime_.*", run_async=True
 ANIME_STUFFS_HANDLER = CallbackQueryHandler(
     animestuffs, pattern="xanime_.*", run_async=True
 )
-ANIMEQUOTES_HANDLER = DisableAbleCommandHandler(
-    "animequotes", animequotes, run_async=True
-)
+
 QUOTE = DisableAbleCommandHandler("quote", quotes)
 CHANGE_QUOTE = CallbackQueryHandler(change_quote, pattern=r"change_.*", run_async=True)
 QUOTE_CHANGE = CallbackQueryHandler(change_quote, pattern=r"quote_.*", run_async=True)
