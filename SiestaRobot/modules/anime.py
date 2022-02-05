@@ -18,6 +18,7 @@ from telegram.ext import (
 from telegram.utils.helpers import mention_html
 from pyrogram import filters
 from bs4 import BeautifulSoup
+from SiestaRobot.modules.helper_funcs.alternate import typing_action
 
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
@@ -168,7 +169,7 @@ query ($id: Int,$search: String) {
 
 url = "https://graphql.anilist.co"
 
-
+@typing_action
 def airing(update, context):
     message = update.effective_message
     search_str = message.text.split(" ", 1)
@@ -855,7 +856,7 @@ def animequotes(update: Update, context: CallbackContext):
     )
     reply_photo(random.choice(QUOTES_IMG))
 
-
+@typing_action
 def watchorderx(_, message):
     anime = message.text.replace(message.text.split(" ")[0], "")
     res = requests.get(
