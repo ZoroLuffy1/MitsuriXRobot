@@ -2,8 +2,8 @@ import html
 import re
 from typing import Optional
 
-from NezukoRobot import LOGGER, TIGERS, dispatcher , DRAGONS
-from NezukoRobot.modules.helper_funcs.chat_status import (
+from SiestaRobot import LOGGER, TIGERS, dispatcher , DRAGONS
+from SiestaRobot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_restrict,
     connection_status,
@@ -11,12 +11,12 @@ from NezukoRobot.modules.helper_funcs.chat_status import (
     user_admin,
     user_admin_no_reply,
 )
-from NezukoRobot.modules.helper_funcs.extraction import (
+from SiestaRobot.modules.helper_funcs.extraction import (
     extract_user,
     extract_user_and_text,
 )
-from NezukoRobot.modules.helper_funcs.string_handling import extract_time
-from NezukoRobot.modules.log_channel import loggable
+from SiestaRobot.modules.helper_funcs.string_handling import extract_time
+from SiestaRobot.modules.log_channel import loggable
 from telegram import (
     Bot, 
     Chat, 
