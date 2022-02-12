@@ -392,10 +392,10 @@ def info(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/NezukoXupdates/2"
+                                "Health", url="https://t.me/NezukoXupdates/4"
                             ),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/NezukoXupdates/1"
+                                "Disaster", url="https://t.me/NezukoXupdates/3"
                             ),
                         ],
                     ]
