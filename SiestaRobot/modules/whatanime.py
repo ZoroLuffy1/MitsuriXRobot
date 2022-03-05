@@ -97,9 +97,4 @@ def is_gif(file):
     return DocumentAttributeAnimated() in getattr(file, "document", file).attributes
 
 
-
-
-
-
-
 # jewfgoihyawe0gu-0eraguy094wautg-072095gbut-0238t3q04ut34qhyytg34wjg0W  U R-=B I9T
